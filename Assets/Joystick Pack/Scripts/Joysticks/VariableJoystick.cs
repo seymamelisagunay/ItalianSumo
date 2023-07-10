@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class VariableJoystick : Joystick
 {
+    public static bool activeMove;
     public float MoveThreshold { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
 
     [SerializeField] private float moveThreshold = 1;
@@ -33,18 +34,23 @@ public class VariableJoystick : Joystick
 
     public override void OnPointerDown(PointerEventData eventData)
     {
+        activeMove = true;
         if(joystickType != JoystickType.Fixed)
         {
             background.anchoredPosition = ScreenPointToAnchoredPosition(eventData.position);
             background.gameObject.SetActive(true);
+            
         }
         base.OnPointerDown(eventData);
     }
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-        if(joystickType != JoystickType.Fixed)
+        if (joystickType != JoystickType.Fixed)
+        {
             background.gameObject.SetActive(false);
+            activeMove = false;
+        }
 
         base.OnPointerUp(eventData);
     }
